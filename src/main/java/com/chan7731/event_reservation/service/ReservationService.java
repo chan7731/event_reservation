@@ -8,6 +8,8 @@ import com.chan7731.event_reservation.repository.EventRepository;
 import com.chan7731.event_reservation.repository.ReservationRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.NoSuchElementException;
@@ -18,6 +20,10 @@ import java.util.NoSuchElementException;
 public class ReservationService {
     private final ReservationRepository reservationRepository;
     private final EventRepository eventRepository;
+
+    public Page<Reservation> getByEvent(Long eventId, Pageable pageable) {
+        return reservationRepository.findByEventId(eventId, pageable);
+    }
 
     public Reservation create(Long eventId, ReservationDto reservationDto) {
         Event event = eventRepository.findById(eventId).orElseThrow(() -> new NoSuchElementException("이벤트 없음"));
